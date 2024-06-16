@@ -1,0 +1,209 @@
+/* src/FrontEnd-React/src/components/navbar/navbar.css */
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  position: relative; /* Añadido para posicionamiento del menú desplegable */
+}
+
+.navbar-sections {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-section {
+  position: relative;
+  cursor: pointer;
+  padding: 16.7px;
+  padding-bottom: 15px;
+}
+
+.navbar-section a {
+  color: #7a7a7a;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: bold;
+  border-bottom: 2px solid transparent; /* Añade un borde inferior transparente */
+  transition: border-bottom 0.3s; /* Agrega una transición suave para el cambio de borde inferior */
+}
+
+.navbar-section:hover a {
+  color: rgb(0, 0, 0);
+  border-bottom-color: #000; /* Cambia el color del borde inferior al pasar el ratón */
+}
+
+.navbar-section.ropanavbar a {
+  border-bottom: none; /* Elimina el borde inferior en los enlaces del menú desplegable */
+}
+
+.navbar-section.ropanavbar:hover a {
+  border-bottom: 2px solid transparent; /* Restablece el borde inferior transparente en el menú desplegable */
+}
+
+.ropa-menu {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  background-color: #fff;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-top: none;
+  display: none;
+  width: 200px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.ropa-menu a {
+  display: block;
+  color: #333;
+  text-decoration: none;
+  padding: 5px 10px;
+}
+
+.navbar-section:hover .ropa-menu {
+  display: block;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  margin-left: 110px; /* Ajusta el margen izquierdo del logo */
+}
+
+.navbar-logo img {
+  height: 50px;
+}
+
+.navbar-profile {
+  display: flex;
+  align-items: center;
+  margin-left: auto; /* Mueve el perfil hacia la derecha */
+}
+
+.profile-icons {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-profile p {
+  margin-right: 10px; /* Espacio entre el username y los iconos */
+}
+
+.navbar-profile a svg {
+  fill: #000;
+}
+
+.navbar-profile a:first-child {
+  margin-right: 10px; /* Márgen derecho para el primer icono */
+}
+
+.navbar-profile a:last-child {
+  margin-left: 10px; /* Márgen izquierdo para el segundo icono */
+}
+
+.profile-icons a {
+  text-decoration: none;
+  color: #333;
+  font-size: 20px;
+  font-weight: bold;
+  margin-left: 10px; /* Espacio entre los iconos */
+}
+
+.profile-icons a:hover {
+  color: rgb(0, 0, 0);
+}
+
+.navbar-collapse-toggle img {
+  display: none;
+  height: 30px; /* Tamaño reducido de la imagen de las tres barritas */
+}
+
+@media screen and (max-width: 768px) {
+  .navbar-sections {
+    display: none;
+  }
+
+  .navbar-collapse-toggle img {
+    display: block;
+  }
+
+  .navbar-dropdown {
+    display: none;
+    flex-direction: column;
+    background-color: #fff;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    border: 1px solid #000; /* Borde negro fino */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+  
+  .navbar-dropdown a {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+    color: #7a7a7a;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: bold;
+  }
+  
+  .navbar-dropdown a:hover {
+    color: rgb(0, 0, 0); /* Cambia el color al pasar el ratón por encima */
+  }
+  
+  .navbar-dropdown a:last-child {
+    border-bottom: none;
+  }
+
+  .navbar-dropdown.show {
+    display: flex;
+  }
+
+}
+
+.logout-button {
+  width: 120px; /* Ancho ajustado para el botón */
+  height: 40px; /* Altura ajustada para el botón */
+  margin-top: 10px; /* Margen superior */
+  padding: 8px 16px; /* Ajuste del padding */
+  font-size: 14px; /* Tamaño de la fuente */
+  background-color: #000; /* Color de fondo */
+  color: #fff; /* Color del texto */
+  border: none; /* Sin borde */
+  cursor: pointer; /* Cursor apuntador */
+  transition: background-color 0.3s, color 0.3s; /* Transiciones suaves */
+}
+
+.logout-button:hover {
+  background-color: #555; /* Cambio de color de fondo al pasar el ratón */
+}
+
+.logout-button:focus {
+  outline: none; /* Quita el borde de enfoque */
+}
+
+.logout-menu {
+  position: absolute; /* Posicionamiento absoluto */
+  top: 30px; /* Distancia desde la parte superior */
+  right: 0; /* Alineación a la derecha */
+  z-index: 1000; /* Índice z alto para superponer sobre otros elementos */
+  padding: 8px; /* Espaciado interno */
+  min-width: 120px; /* Ancho mínimo del menú */
+  display: none; /* Inicialmente oculto */
+}
+
+.username-container:hover .logout-menu {
+  display: block; /* Mostrar el menú al pasar el ratón sobre el contenedor del username */
+}
+
+.username-container p {
+  cursor: pointer; /* Cambio de cursor al pasar por encima */
+}
+

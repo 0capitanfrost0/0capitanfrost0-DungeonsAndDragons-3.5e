@@ -1,0 +1,55 @@
+/* article_details.css */
+
+.article-details-container {
+    width: 70%;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #333;
+  }
+  
+  .article-details-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .article-details-title {
+    font-size: 2.5em;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .article-details-meta {
+    font-size: 0.9em;
+    color: #777;
+  }
+  
+  .article-details-meta span {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .article-details-author,
+  .article-details-date,
+  .article-details-time {
+    display: inline-block;
+    margin-right: 15px;
+  }
+  
+  .article-details-image {
+    width: 100%;
+    height: auto;
+    margin-top: 20px;
+    border-radius: 8px;
+  }
+  
+  .article-details-content {
+    margin-top: 20px;
+    font-size: 1.1em;
+  }
+  
+  .article-details-content p {
+    margin-bottom: 15px;
+  }
+  

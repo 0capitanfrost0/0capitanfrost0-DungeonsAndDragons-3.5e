@@ -1,0 +1,100 @@
+.custom-filters-container {
+  width: 250px;
+  border-right: 1px solid #ccc;
+  padding: 10px;
+  background-color: #ffffff;
+  height: calc(100vh - 60px); /* Ajusta según la altura del navbar */
+  overflow-y: auto;
+  position: fixed;
+  top: 60px; /* Ajusta esta posición para que esté justo debajo del navbar */
+  bottom: 0;
+}
+
+.custom-filters-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
+.custom-filter-section {
+  margin-bottom: 15px;
+}
+
+.custom-filter-title {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1em;
+  color: #333;
+  padding: 5px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.custom-filter-title span {
+  margin-left: 5px;
+  font-size: 1.2em; /* Ajusta el tamaño según sea necesario */
+}
+
+.custom-filter-options {
+  margin-top: 5px;
+  padding-left: 10px;
+}
+
+.custom-filter-option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.custom-filter-option input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+.custom-filter-price {
+  margin-top: 10px;
+}
+
+.custom-filter-price span {
+  margin-top: 5px;
+  display: block;
+}
+
+.aplicar-filtros-button{
+  width: 110px;
+}
+
+.card-button {
+  display: inline-block;
+  padding: 10px 20px;
+  margin-top: 10px;
+  font-size: 16px;
+  text-align: center;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.card-button:hover {
+  background-color: #555;
+}
+
+.filterbutton {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #000000;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  width: 60%;
+  height: 4%;
+  margin-bottom: 150px;
+  margin-left: 50px;
+}
+
+.filterbutton:hover {
+  background-color: #6d6d6d;
+}

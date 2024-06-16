@@ -1,0 +1,32 @@
+.card {
+  /* Ajustamos el margen izquierdo para los elementos card */
+  margin-left: 25px;
+}
+
+.pagination {
+  /* Estilo del contenedor de la paginación */
+  margin-top: 50px;
+  text-align: center;
+}
+
+.pagination button {
+  /* Estilo de los botones de paginación */
+  padding: 10px 20px; /* Ajusta el padding según sea necesario */
+  margin: 0 10px; /* Espacio entre los botones */
+  font-size: 16px; /* Tamaño de la fuente */
+  background-color: #000; /* Color de fondo del botón */
+  color: #fff; /* Color del texto del botón */
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pagination button:hover {
+  /* Efecto hover del botón de paginación */
+  background-color: #555; /* Color de fondo al pasar el cursor */
+}
+
+.pagination span {
+  /* Estilo del texto de paginación */
+  font-size: 14px; /* Tamaño de la fuente */
+}

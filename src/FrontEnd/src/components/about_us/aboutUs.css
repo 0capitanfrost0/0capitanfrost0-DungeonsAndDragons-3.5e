@@ -1,0 +1,73 @@
+/* Importa la fuente Lato desde Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;600&display=swap');
+
+body {
+  font-family: 'Lato', sans-serif;
+}
+
+.aboutus-page-container {
+  max-width: 8000px;
+  margin: 0 auto;
+}
+
+.aboutus-page-container img {
+  max-width: 100%;
+  height: auto;
+}
+
+.aboutus-image-container img {
+  width: 100%;
+  height: auto;
+}
+
+.aboutus-image-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.aboutus-row-image {
+  width: 32%;
+}
+
+.aboutus-page-container p {
+  margin-bottom: 20px;
+}
+
+.aboutus-page-container strong {
+  font-weight: bold;
+}
+
+.aboutus-page-container ol {
+  margin-bottom: 20px;
+  margin-left: 20px;
+  text-align: left;
+}
+
+.aboutus-page-container div {
+  margin-bottom: 30px;
+}
+
+.aboutus-page-container div:last-child {
+  margin-bottom: 0;
+}
+
+.aboutus-text-container {
+  text-align: center;
+}
+
+.aboutus-text-block {
+  display: inline-block;
+  text-align: left;
+  max-width: 800px;
+  margin-top: 0px;
+  margin-bottom: 50px;
+}
+
+.aboutus-text-block-history {
+  max-width: 800px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  margin-left: 530px;
+  text-align: center;
+}
