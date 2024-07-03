@@ -1,0 +1,58 @@
+.SpellLevels-container {
+    margin: 20px;
+    color: white;
+    margin: 0 auto;
+    width: 40%;
+    text-align: center;
+  }
+  
+  .level-section {
+    margin-bottom: 10px;
+  }
+  
+  .level-header {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #747474;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .level-header:hover {
+    background-color: #8a8a8a;
+  }
+  
+  .spell-list {
+    background-color: #ececec; /* Color de fondo del contenido desplegable */
+    padding: 10px;
+    margin-right:5%;
+    margin-left:5%;
+    margin-top:1%;
+    border: 2px solid gray;
+  }
+  
+  .spell-list ul {
+    list-style-type: none;
+    padding: 0;
+    
+  }
+  
+  .spell-list li {
+    margin-bottom: 3%;
+    text-align: left;
+    padding: 3px;
+
+  }
+  .spell-list li:hover {
+    background-color: rgba(192, 192, 192, 0.671);
+  }
+  .spell-list a {
+    color: #333; /* Color del texto del enlace */
+    text-decoration: none;
+    transition: color 0.3s ease; /* Transición suave del color del texto */
+  }
+  
