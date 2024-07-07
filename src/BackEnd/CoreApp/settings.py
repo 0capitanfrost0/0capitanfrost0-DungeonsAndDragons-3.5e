@@ -24,6 +24,8 @@ BASE_APPS = [
 
 LOCAL_APPS = [
     'Apps.CalculatorApp',
+    'Apps.Characters',
+
 ]
 
 
@@ -36,7 +38,8 @@ THIRDS_APPS = [
 
 INSTALLED_APPS = BASE_APPS+THIRDS_APPS+LOCAL_APPS
 
-
+# Define the default error image path
+DEFAULT_ERROR_IMAGE = 'Resources/Images/Error/error_img.jpg'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
