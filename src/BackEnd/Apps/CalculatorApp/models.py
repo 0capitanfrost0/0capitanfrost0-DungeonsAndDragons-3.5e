@@ -18,6 +18,7 @@ class Hechizo(models.Model):
     duracion = models.CharField(max_length=50, blank=True, null=True)
     tirada_de_salvacion = models.CharField(max_length=100, blank=True, null=True)
     resistencia_de_hechizos = models.CharField(max_length=100, blank=True, null=True)
+    descripcion_corta = models.CharField(max_length=100,blank=True, null=True)
     descripcion_completa = models.TextField(blank=True, null=True)
 
     def __str__(self):

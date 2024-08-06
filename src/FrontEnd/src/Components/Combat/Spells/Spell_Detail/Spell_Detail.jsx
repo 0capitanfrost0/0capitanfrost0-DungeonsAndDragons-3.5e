@@ -10,7 +10,7 @@ const SpellLevels = () => {
   useEffect(() => {
     const fetchSpellDetail = async () => {
       try {
-        const response = await fetch(`${BASE_API_URL}/api/calculator/spells/${name}/`);
+        const response = await fetch(`${BASE_API_URL}/api/combatApp/spells/${name}/`);
         if (!response.ok) {
           throw new Error('Failed to fetch spell');
         }
@@ -42,6 +42,7 @@ const SpellLevels = () => {
       <p><strong>Duración:</strong> {spell.duracion}</p>
       <p><strong>Tirada de Salvación:</strong> {spell.tirada_de_salvacion}</p>
       <p><strong>Resistencia de Hechizos:</strong> {spell.resistencia_de_hechizos}</p>
+      <p><strong>Descripción Corta:</strong> {spell.descripcion_corta}</p>
       <p><strong>Descripción Completa:</strong> {spell.descripcion_completa}</p>
     </div>
   );
