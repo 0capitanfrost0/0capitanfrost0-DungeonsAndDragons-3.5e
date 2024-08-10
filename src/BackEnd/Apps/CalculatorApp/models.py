@@ -1,15 +1,13 @@
 from django.db import models
-
-
+import ast
 
 class Hechizo(models.Model):
 
     nombre = models.CharField(max_length=100, blank=True, null=True)
+    clase_nivel = models.JSONField(default=dict, blank=True, null=True)  # Diccionario para almacenar clases y niveles
     escuela =  models.CharField(max_length=100, blank=True, null=True)
     subescuela= models.CharField(max_length=100, blank=True, null=True)
     descriptor = models.CharField(max_length=100, blank=True, null=True)
-    nivel = models.IntegerField(blank=True, null=True)
-    clase = models.CharField(max_length=100, blank=True, null=True)
     componentes = models.CharField(max_length=100, blank=True, null=True)
     tiempo_de_lanzamiento = models.CharField(max_length=50, blank=True, null=True)
     rango = models.CharField(max_length=100, blank=True, null=True)
@@ -18,7 +16,7 @@ class Hechizo(models.Model):
     duracion = models.CharField(max_length=50, blank=True, null=True)
     tirada_de_salvacion = models.CharField(max_length=100, blank=True, null=True)
     resistencia_de_hechizos = models.CharField(max_length=100, blank=True, null=True)
-    descripcion_corta = models.CharField(max_length=100,blank=True, null=True)
+    descripcion_corta = models.CharField(max_length=100, blank=True, null=True)
     descripcion_completa = models.TextField(blank=True, null=True)
 
     def __str__(self):

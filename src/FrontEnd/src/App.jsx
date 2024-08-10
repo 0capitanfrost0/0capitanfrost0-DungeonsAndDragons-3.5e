@@ -14,7 +14,6 @@ import Register from './Components/Auth/Register/Register';
 import ProtectedRoute from './Components/Auth/ProtectedRoute';
 import Navbar from './Components/Main/Navbar/Navbar';
 
-import { v4 as uuidv4 } from 'uuid'; // Importa uuid para generar identificadores únicos
 
 
 function Logout(){
@@ -38,28 +37,6 @@ const ProtectedLayout = () => {
 
 
 function App() {
-  const [preparedSpells, setPreparedSpells] = useState({});
-
-  const prepareSpell = (spell) => {
-    const spellWithId = { ...spell, instanceId: uuidv4() };
-    setPreparedSpells((prevSpells) => {
-      const level = spell.nivel;
-      const newLevelSpells = prevSpells[level] ? [...prevSpells[level], spellWithId] : [spellWithId];
-      return { ...prevSpells, [level]: newLevelSpells };
-    });
-  };
-
-  const unprepareSpell = (spellInstanceId, level) => {
-    setPreparedSpells((prevSpells) => {
-      const newLevelSpells = prevSpells[level]?.filter(spell => spell.instanceId !== spellInstanceId) || [];
-      if (newLevelSpells.length === 0) {
-        const { [level]: _, ...rest } = prevSpells;
-        return rest;
-      } else {
-        return { ...prevSpells, [level]: newLevelSpells };
-      }
-    });
-  };
 
   return (
     <BrowserRouter>
@@ -73,7 +50,7 @@ function App() {
           <Route path="/home" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
           <Route path="/combat" element={<ProtectedRoute><Combat /></ProtectedRoute>} />
           <Route path="/combat/spells" element={<ProtectedRoute><ClassesGrid /></ProtectedRoute>} />
-          <Route path="/combat/spells/:className" element={<ProtectedRoute><SpellLevels prepareSpell={prepareSpell} unprepareSpell={unprepareSpell} preparedSpells={preparedSpells} /></ProtectedRoute>} />
+          <Route path="/combat/spells/:className" element={<ProtectedRoute><SpellLevels/></ProtectedRoute>} />
           <Route path="/combat/spells/:className/:name" element={<ProtectedRoute><SpellDetail /></ProtectedRoute>} />
         </Route>
 

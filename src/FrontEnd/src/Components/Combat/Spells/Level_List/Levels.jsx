@@ -2,151 +2,201 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import './Levels.css';
 import { BASE_API_URL } from "../../../constants";
+import preparedIcon from '/Combat/Spells/prepared-icon.png'; // Importa la imagen
+import preparedIconCrossed from '/Combat/Spells/prepared-icon-crossed.png'; // Importa la imagen
 
-const normalizeString = (str) => {
-  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-};
-
-const capitalize = (str) => {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-};
-
-const SpellLevels = () => {
+export default function SpellLevels() {
   const { className } = useParams();
-  const [spellLevels, setSpellLevels] = useState({});
+  const [spells, setSpells] = useState([]);
+  const [groupedSpells, setGroupedSpells] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [openTabs, setOpenTabs] = useState({});
   const [preparedSpells, setPreparedSpells] = useState({});
-  const [expandedLevel, setExpandedLevel] = useState(null);
-  const [expandedPreparedSpell, setExpandedPreparedSpell] = useState(null);
+  const [preparedTabs, setPreparedTabs] = useState({});
 
-  const fetchSpells = async () => {
-    try {
-      const response = await fetch(`${BASE_API_URL}/api/combatApp/spells/`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch spells');
-      }
-      const data = await response.json();
-      const filteredSpells = data.filter(spell => {
-        if (spell.clase) {
-          const spellClasses = spell.clase.split(',').map(cls => normalizeString(cls.trim()));
-          const normalizedClassName = normalizeString(className);
-          return spellClasses.includes(normalizedClassName);
-        }
-        return false;
-      });
-      const groupedSpells = {};
-      filteredSpells.forEach(spell => {
-        if (groupedSpells.hasOwnProperty(spell.nivel)) {
-          groupedSpells[spell.nivel].push(spell);
-        } else {
-          groupedSpells[spell.nivel] = [spell];
-        }
-      });
-      setSpellLevels(groupedSpells);
-    } catch (error) {
-      console.error('Error fetching spells:', error);
-    }
+  const classMapping = {
+    clerigo: "Clr",
+    druida: "Drd",
+    paladin: "Pal",
+    bardo: "Brd",
+    hechicero: "Hch",
+    mago: "Mag",
+    explorador: "Exp"
+  };
+
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
   useEffect(() => {
+    const fetchSpells = async () => {
+      try {
+        const response = await fetch(`${BASE_API_URL}/api/combatApp/spells/`);
+        if (!response.ok) {
+          throw new Error('Error fetching spells');
+        }
+        const data = await response.json();
+
+        const classKey = classMapping[className];
+        const filtered = data.filter(spell => spell.clase_nivel && spell.clase_nivel.hasOwnProperty(classKey));
+
+        const grouped = filtered.reduce((acc, spell) => {
+          const level = spell.clase_nivel[classKey];
+          if (!acc[level]) {
+            acc[level] = [];
+          }
+          acc[level].push(spell);
+          return acc;
+        }, {});
+
+        setSpells(filtered);
+        setGroupedSpells(grouped);
+        setLoading(false);
+
+        // Initialize preparedTabs to open all levels
+        const initialTabs = Object.keys(grouped).reduce((tabs, level) => {
+          tabs[level] = true; // Set all levels to open by default
+          return tabs;
+        }, {});
+        setPreparedTabs(initialTabs);
+
+      } catch (error) {
+        setError(error.message);
+        setLoading(false);
+      }
+    };
+
     fetchSpells();
   }, [className]);
 
-  const prepareSpell = (spell) => {
-    const instanceId = Date.now(); // Genera un ID único para la instancia del hechizo
-    const newSpell = { ...spell, instanceId };
+  const toggleTab = (level) => {
+    setOpenTabs((prevTabs) => ({
+      ...prevTabs,
+      [level]: !prevTabs[level]
+    }));
+  };
 
-    setPreparedSpells(prev => {
-      const updatedPreparedSpells = { ...prev };
+  const togglePreparedTab = (level) => {
+    setPreparedTabs((prevTabs) => ({
+      ...prevTabs,
+      [level]: !prevTabs[level]
+    }));
+  };
 
-      if (!updatedPreparedSpells[spell.nivel]) {
-        updatedPreparedSpells[spell.nivel] = [];
+  const handlePrepareSpell = (spell) => {
+    setPreparedSpells((prevPrepared) => {
+      const level = spell.clase_nivel[classMapping[className]];
+      const newPrepared = { ...prevPrepared };
+      if (!newPrepared[level]) {
+        newPrepared[level] = [];
       }
-
-      // Verifica si la instancia del hechizo ya está en la lista de preparados
-      if (!updatedPreparedSpells[spell.nivel].some(existingSpell => existingSpell.id === spell.id && existingSpell.instanceId === instanceId)) {
-        updatedPreparedSpells[spell.nivel].push(newSpell);
+      const existingSpellIndex = newPrepared[level].findIndex(prepared => prepared.spell.id === spell.id);
+      if (existingSpellIndex !== -1) {
+        newPrepared[level][existingSpellIndex].count += 1;
+      } else {
+        newPrepared[level].push({ spell, count: 1 });
       }
-
-      return updatedPreparedSpells;
+      return newPrepared;
     });
   };
 
-  const unprepareSpell = (instanceId, level) => {
-    setPreparedSpells(prev => {
-      const updatedPreparedSpells = { ...prev };
-
-      if (updatedPreparedSpells[level]) {
-        const index = updatedPreparedSpells[level].findIndex(spell => spell.instanceId === instanceId);
-        if (index !== -1) {
-          updatedPreparedSpells[level].splice(index, 1);
-          if (updatedPreparedSpells[level].length === 0) {
-            delete updatedPreparedSpells[level];
+  const handleRemovePreparedSpell = (spell) => {
+    setPreparedSpells((prevPrepared) => {
+      const level = spell.clase_nivel[classMapping[className]];
+      const newPrepared = { ...prevPrepared };
+      if (newPrepared[level]) {
+        const existingSpellIndex = newPrepared[level].findIndex(prepared => prepared.spell.id === spell.id);
+        if (existingSpellIndex !== -1) {
+          if (newPrepared[level][existingSpellIndex].count > 1) {
+            newPrepared[level][existingSpellIndex].count -= 1;
+          } else {
+            newPrepared[level].splice(existingSpellIndex, 1);
+            if (newPrepared[level].length === 0) {
+              delete newPrepared[level];
+            }
           }
         }
       }
-
-      return updatedPreparedSpells;
+      return newPrepared;
     });
   };
 
-  const toggleLevel = (level) => {
-    setExpandedLevel(expandedLevel === level ? null : level);
-  };
+  if (loading) {
+    return <div className='SpellLevels-Container'>Loading...</div>;
+  }
 
-  const togglePreparedSpell = (instanceId) => {
-    setExpandedPreparedSpell(expandedPreparedSpell === instanceId ? null : instanceId);
-  };
+  if (error) {
+    return <div className='SpellLevels-Container'>Error: {error}</div>;
+  }
 
   return (
-    <div className="SpellLevels-container">
-      <h1>Conjuros de {capitalize(className)}</h1>
-      <div className="spells-wrapper">
-        <div className="spells-list">
-          {Object.keys(spellLevels).map((level) => (
-            <div key={level} className="level-section">
-              <button className="level-header" onClick={() => toggleLevel(level)}>
+    <div className='SpellLevels-Container'>
+      <h1>Hechizos de {capitalizeFirstLetter(className)}</h1>
+      <div className='SpellLevels-PreparedSpell'> 
+        <div className="SpellLevels-List">
+          <div className='spell-h3'>
+            <h3>Lista de Conjuros</h3>
+          </div>
+          {Object.keys(groupedSpells).map(level => (
+            <div key={level} className="SpellLevel">
+              <div 
+                className="SpellLevel-Header"
+                onClick={() => toggleTab(level)}
+              >
                 Nivel {level}
-              </button>
-              {expandedLevel === level && (
-                <div className="spell-list">
-                  <ul>
-                    {spellLevels[level].map((spell) => (
-                      <li key={spell.id}>
-                        <Link to={`/combat/spells/${className}/${spell.nombre}`}>{spell.nombre}</Link>
-                        <button onClick={() => prepareSpell(spell)}>Preparar</button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              </div>
+              {openTabs[level] && (
+                <ul className="SpellLevel-Content">
+                  {groupedSpells[level].map(spell => (
+                    <li key={spell.id} className="SpellItem">
+                      <Link 
+                        to={`/combat/spells/${className}/${spell.nombre}`} 
+                        className="SpellName">
+                        {spell.nombre}
+                      </Link>
+                      <button className="PreparedButton" onClick={() => handlePrepareSpell(spell)}>
+                        <img src={preparedIcon} alt="Prepared Icon" />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
               )}
             </div>
           ))}
         </div>
-        <div className="prepared-spells">
-          <h2>Hechizos Preparados</h2>
-          {Object.keys(preparedSpells).map((level) => (
-            <div key={level} className="prepared-level-section">
-              <h3>Nivel {level}</h3>
-              <ul>
-                {Array.isArray(preparedSpells[level]) && preparedSpells[level].map((spell) => (
-                  <li key={spell.instanceId}>
-                    {spell.nombre}
-                    <button onClick={() => togglePreparedSpell(spell.instanceId)}>Descripción</button>
-                    {expandedPreparedSpell === spell.instanceId && (
-                      <div className="spell-description">
-                        {spell.descripcion_corta}
-                      </div>
-                    )}
-                    <button onClick={() => unprepareSpell(spell.instanceId, level)}>Desaprender</button>
-                  </li>
-                ))}
-              </ul>
+        <div className="PreparedSpell-List">
+          <div className='spell-h3'>
+            <h3>Preparados</h3>
+          </div>          
+          {Object.keys(preparedSpells).map(level => (
+            <div key={level} className="SpellLevel">
+              <div 
+                className="SpellLevel-Header"
+                onClick={() => togglePreparedTab(level)}
+              >
+                Nivel {level}
+              </div>
+              {preparedTabs[level] && (
+                <ul className="SpellLevel-Content">
+                  {preparedSpells[level].map(prepared => (
+                    <li key={prepared.spell.id} className="SpellItem">
+                      <Link 
+                        to={`/combat/spells/${className}/${prepared.spell.nombre}`} 
+                        className="SpellName">
+                        {prepared.spell.nombre} (x{prepared.count})
+                      </Link>
+                      <button className="PreparedButton" onClick={() => handleRemovePreparedSpell(prepared.spell)}>
+                        <img src={preparedIconCrossed} alt="Prepared Icon" />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           ))}
         </div>
       </div>
     </div>
   );
-};
-
-export default SpellLevels;
+}

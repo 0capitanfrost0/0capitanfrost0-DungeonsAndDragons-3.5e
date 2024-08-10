@@ -8,9 +8,9 @@ class HechizoResource(resources.ModelResource):
        model = Hechizo
 
 class HechizoAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ('nombre','escuela','descriptor','nivel','clase','componentes','tiempo_de_lanzamiento','rango','objetivo','efecto','duracion','tirada_de_salvacion','resistencia_de_hechizos')
-    list_filter = ('nombre','escuela','descriptor','nivel','clase','componentes','tiempo_de_lanzamiento','rango','objetivo','efecto','duracion','tirada_de_salvacion','resistencia_de_hechizos')
-    search_fields = ('nombre','escuela','descriptor','nivel','clase','componentes','tiempo_de_lanzamiento','rango','objetivo','efecto','duracion','tirada_de_salvacion','resistencia_de_hechizos')
+    list_display = ('nombre','escuela','descriptor','clase_nivel','componentes','tiempo_de_lanzamiento','rango','objetivo','efecto','duracion','tirada_de_salvacion','resistencia_de_hechizos')
+    list_filter = ('nombre','escuela','descriptor','clase_nivel','componentes','tiempo_de_lanzamiento','rango','objetivo','efecto','duracion','tirada_de_salvacion','resistencia_de_hechizos')
+    search_fields = ('nombre','escuela','descriptor','clase_nivel','clase','componentes','tiempo_de_lanzamiento','rango','objetivo','efecto','duracion','tirada_de_salvacion','resistencia_de_hechizos')
     resource_class = HechizoResource
 
 

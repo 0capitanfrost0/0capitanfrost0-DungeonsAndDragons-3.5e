@@ -1,30 +1,44 @@
 .SpellDetail-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.SpellDetail-text {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.SpellDetail-text h1 {
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.SpellDetail-text p {
+  font-size: 1.1em;
+  line-height: 1.6;
+  margin: 10px 0;
+  color: #555;
+}
+
+.SpellDetail-text strong {
+  color: #333;
+}
+
+@media (max-width: 600px) {
+  .SpellDetail-text {
+    padding: 15px;
   }
-  
-  .SpellDetail-container h1 {
-    font-size: 24px;
-    margin-bottom: 10px;
+
+  .SpellDetail-text h1 {
+    font-size: 1.5em;
   }
-  
-  .SpellDetail-container p {
-    margin-bottom: 8px;
+
+  .SpellDetail-text p {
+    font-size: 1em;
   }
-  
-  .SpellDetail-container strong {
-    font-weight: bold;
-  }
-  
-  /* Ejemplo de estilo específico para un elemento */
-  .SpellDetail-container .description {
-    margin-top: 20px;
-    font-style: italic;
-  }
-  
-  /* Otros estilos según necesites */
-  
+}

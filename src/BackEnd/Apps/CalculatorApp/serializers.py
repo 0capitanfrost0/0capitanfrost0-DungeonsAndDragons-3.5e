@@ -5,3 +5,4 @@ class HechizoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hechizo
         fields = '__all__'
+
