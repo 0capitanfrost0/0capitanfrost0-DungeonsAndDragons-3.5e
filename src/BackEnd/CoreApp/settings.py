@@ -166,7 +166,7 @@ X_FRAME_OPTIONS = "SAMEORIGIN" #Para el custom admin
 
 #-------------------CKEDITOR-------------------
 
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 customColorPalette = [

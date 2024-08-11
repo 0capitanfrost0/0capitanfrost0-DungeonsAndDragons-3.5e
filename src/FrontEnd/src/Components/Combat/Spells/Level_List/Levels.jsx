@@ -9,11 +9,13 @@ export default function SpellLevels() {
   const { className } = useParams();
   const [spells, setSpells] = useState([]);
   const [groupedSpells, setGroupedSpells] = useState({});
+  const [domainGroupedSpells, setDomainGroupedSpells] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [openTabs, setOpenTabs] = useState({});
   const [preparedSpells, setPreparedSpells] = useState({});
   const [preparedTabs, setPreparedTabs] = useState({});
+  const [openDomains, setOpenDomains] = useState({});
 
   const classMapping = {
     clerigo: "Clr",
@@ -24,6 +26,12 @@ export default function SpellLevels() {
     mago: "Mag",
     explorador: "Exp"
   };
+
+  const domainKeys = [
+    "Aire", "Animal", "Caos", "Muerte", "Destrucción", "Tierra", "Mal", "Fuego",
+    "Bien", "Curación", "Saber", "Ley", "Suerte", "Magia", "Vegetal", 
+    "Protección", "Fuerza", "Sol", "Viaje", "Guerra", "Agua", "Superchería"
+  ];
 
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -52,14 +60,38 @@ export default function SpellLevels() {
 
         setSpells(filtered);
         setGroupedSpells(grouped);
+
+        if (className === "clerigo") {
+          const domainGrouped = domainKeys.reduce((acc, domain) => {
+            const domainSpells = data.filter(spell => spell.clase_nivel && spell.clase_nivel[domain]);
+
+            domainSpells.forEach(spell => {
+              const level = spell.clase_nivel[domain];
+              if (!acc[domain]) {
+                acc[domain] = [];
+              }
+              acc[domain].push({ ...spell, domainLevel: level }); // Añade el nivel de dominio al hechizo
+            });
+
+            return acc;
+          }, {});
+
+          setDomainGroupedSpells(domainGrouped);
+        }
+
         setLoading(false);
 
-        // Initialize preparedTabs to open all levels
         const initialTabs = Object.keys(grouped).reduce((tabs, level) => {
-          tabs[level] = true; // Set all levels to open by default
+          tabs[level] = true; 
           return tabs;
         }, {});
         setPreparedTabs(initialTabs);
+
+        const initialDomains = Object.keys(domainGroupedSpells).reduce((domains, domain) => {
+          domains[domain] = false; 
+          return domains;
+        }, {});
+        setOpenDomains(initialDomains);
 
       } catch (error) {
         setError(error.message);
@@ -122,6 +154,13 @@ export default function SpellLevels() {
     });
   };
 
+  const toggleDomain = (domain) => {
+    setOpenDomains((prevDomains) => ({
+      ...prevDomains,
+      [domain]: !prevDomains[domain]
+    }));
+  };
+
   if (loading) {
     return <div className='SpellLevels-Container'>Loading...</div>;
   }
@@ -150,11 +189,15 @@ export default function SpellLevels() {
                 <ul className="SpellLevel-Content">
                   {groupedSpells[level].map(spell => (
                     <li key={spell.id} className="SpellItem">
-                      <Link 
-                        to={`/combat/spells/${className}/${spell.nombre}`} 
-                        className="SpellName">
-                        {spell.nombre}
-                      </Link>
+                      <div className="tooltip">
+                        <Link 
+                          to={`/combat/spells/${className}/${spell.nombre}`} 
+                          className="SpellName"
+                        >
+                          {spell.nombre}
+                        </Link>
+                        <span className="tooltiptext">{spell.descripcion_corta}</span>
+                      </div>
                       <button className="PreparedButton" onClick={() => handlePrepareSpell(spell)}>
                         <img src={preparedIcon} alt="Prepared Icon" />
                       </button>
@@ -165,10 +208,49 @@ export default function SpellLevels() {
             </div>
           ))}
         </div>
+
+        {className === "clerigo" && Object.keys(domainGroupedSpells).length > 0 && (
+          <div className="SpellLevels-List">
+            <div className='spell-h3'>
+              <h3>Hechizos de Dominio</h3>
+            </div>
+            {Object.keys(domainGroupedSpells).map(domain => (
+              <div key={domain} className="SpellDomain">
+                <div 
+                  className="SpellDomain-Header"
+                  onClick={() => toggleDomain(domain)}
+                >
+                  {domain}
+                </div>
+                {openDomains[domain] && (
+                  <ul className="SpellLevel-Content">
+                    {domainGroupedSpells[domain].map(spell => (
+                      <li key={spell.id} className="SpellItem">
+                        <div className="tooltip">
+                          <Link 
+                            to={`/combat/spells/${className}/${spell.nombre}`} 
+                            className="SpellName"
+                          >
+                            <strong>{spell.domainLevel}.</strong> {spell.nombre}
+                          </Link>
+                          <span className="tooltiptext">{spell.descripcion_corta}</span>
+                        </div>
+                        <button className="PreparedButton" onClick={() => handlePrepareSpell(spell)}>
+                          <img src={preparedIcon} alt="Prepared Icon" />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
         <div className="PreparedSpell-List">
           <div className='spell-h3'>
             <h3>Preparados</h3>
-          </div>          
+          </div>
           {Object.keys(preparedSpells).map(level => (
             <div key={level} className="SpellLevel">
               <div 
@@ -181,13 +263,17 @@ export default function SpellLevels() {
                 <ul className="SpellLevel-Content">
                   {preparedSpells[level].map(prepared => (
                     <li key={prepared.spell.id} className="SpellItem">
-                      <Link 
-                        to={`/combat/spells/${className}/${prepared.spell.nombre}`} 
-                        className="SpellName">
-                        {prepared.spell.nombre} (x{prepared.count})
-                      </Link>
+                      <div className="tooltip">
+                        <Link 
+                          to={`/combat/spells/${className}/${prepared.spell.nombre}`} 
+                          className="SpellName"
+                        >
+                          {prepared.spell.nombre} ({prepared.count})
+                        </Link>
+                        <span className="tooltiptext">{prepared.spell.descripcion_corta}</span>
+                      </div>
                       <button className="PreparedButton" onClick={() => handleRemovePreparedSpell(prepared.spell)}>
-                        <img src={preparedIconCrossed} alt="Prepared Icon" />
+                        <img src={preparedIconCrossed} alt="Remove Prepared Icon" />
                       </button>
                     </li>
                   ))}

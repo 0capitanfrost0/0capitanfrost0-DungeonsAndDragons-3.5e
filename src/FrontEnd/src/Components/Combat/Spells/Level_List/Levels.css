@@ -154,3 +154,168 @@
         width: 300px;
     }
 }
+/* Estilos para tipos de dominio */
+.SpellDomain {
+    color: black;
+    background-color: white;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 3%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    user-select: none;
+}
+
+/* Encabezado de los tipos de dominio */
+.SpellDomain-Header {
+    background-color: gray; /* Color de fondo del encabezado */
+    border-radius: 2px;
+    padding: 10px;
+    width: 100%;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    box-sizing: border-box;
+    margin-bottom: 1rem; /* Espacio entre encabezados */
+    width: 300px;
+    margin: 0 auto; /* Centrar el encabezado */
+}
+
+/* Estilo al pasar el mouse por encima del encabezado */
+.SpellDomain-Header:hover {
+    background-color: rgb(160, 160, 160);
+}
+
+/* Contenido de cada nivel de dominio */
+.SpellLevel-Content {
+    list-style-type: none;
+    padding-left: 0;
+    margin-left: 0;
+    margin-top: 10px; /* Espacio encima del contenido de nivel */
+}
+
+/* Elementos de la lista de hechizos de dominio */
+.SpellLevel-Content li {
+    margin-bottom: 1rem;
+    padding: 5px;
+    display: flex;
+    justify-content: space-between; /* Alinea el contenido a ambos extremos */
+    align-items: center;
+}
+
+/* Estilo del nombre del hechizo con nivel */
+.SpellName {
+    text-decoration: none;
+    color: black;
+    display: inline-block;
+    padding: 5px;
+    border-radius: 4px;
+    margin-right: 12px;
+    white-space: nowrap; /* Evita que el texto se rompa en varias líneas */
+}
+
+/* Estilo al pasar el mouse por encima del nombre del hechizo */
+.SpellName:hover {
+    background-color: rgb(172, 172, 172);
+    color: white;
+}
+
+/* Botón de preparado */
+.PreparedButton {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+/* Tamaño de la imagen en el botón de preparado */
+.PreparedButton img {
+    width: 20px;
+    height: 20px;
+}
+
+/* Consultas de medios para diferentes tamaños de pantalla */
+
+/* Pantallas pequeñas (móviles) */
+@media (max-width: 600px) {
+    .SpellDomain {
+        width: 100%; /* Ajustar el ancho para móviles */
+    }
+
+    .SpellDomain-Header {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .SpellLevel-Content li {
+        font-size: 14px;
+    }
+
+    .PreparedButton img {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+/* Pantallas medianas (tabletas) */
+@media (max-width: 900px) {
+    .SpellDomain {
+        width: 100%; /* Ajustar el ancho para tabletas */
+    }
+
+    .SpellDomain-Header {
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    .SpellLevel-Content li {
+        font-size: 16px;
+    }
+
+    .PreparedButton img {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+/* Pantallas grandes (escritorios) */
+@media (min-width: 1200px) {
+    .SpellDomain-Header {
+        width: 300px;
+    }
+}
+
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Estilo del tooltip (oculto por defecto) */
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px; /* Ajusta el ancho según el contenido */
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Posición del tooltip */
+    left: 50%;
+    margin-left: -100px; /* Centro el tooltip */
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  /* Mostrar el tooltip cuando el usuario pasa el ratón por encima */
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  

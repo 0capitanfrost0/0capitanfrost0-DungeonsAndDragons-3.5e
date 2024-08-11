@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import './Spell_Details.css';
+import './Spell_Details.css'; // Asegúrate de agregar tus estilos aquí
 import { BASE_API_URL } from "../../../constants";
 
 const SpellLevels = () => {
@@ -27,20 +27,27 @@ const SpellLevels = () => {
     return <div>Cargando...</div>;
   }
 
-  // Función para filtrar atributos vacíos o que solo contienen "-"
   const filterAttributes = (value) => {
     return value && value !== '-' ? value : null;
   };
 
-  // Función para formatear clase_nivel
   const formatClassLevel = (claseNivel) => {
     if (!claseNivel || typeof claseNivel !== 'object') return '';
 
     return Object.entries(claseNivel).map(([clase, niveles]) => {
-      // Asegurarse de que niveles sea una matriz antes de usar join
       const nivelesText = Array.isArray(niveles) ? niveles.join(', ') : niveles;
       return `${clase}: ${nivelesText}`;
     }).join(', ');
+  };
+
+  const constructImageUrl = (imagePath) => {
+    if (!imagePath) return null;
+  
+    // Reemplaza el BASE_API_URL con una cadena vacía para obtener la ruta relativa
+    const relativePath = imagePath.replace(`${BASE_API_URL}`, "");
+  
+    // Construye la nueva URL con el prefijo BASE_API_URL y la nueva ruta
+    return `${BASE_API_URL}/api/combatApp${relativePath}`;
   };
 
   return (
@@ -61,6 +68,13 @@ const SpellLevels = () => {
         {filterAttributes(spell.resistencia_de_hechizos) && <p><strong>Resistencia de Hechizos:</strong> {spell.resistencia_de_hechizos}</p>}
         {filterAttributes(spell.descripcion_corta) && <p><strong>Descripción Corta:</strong> {spell.descripcion_corta}</p>}
         {filterAttributes(spell.descripcion_completa) && <p><strong>Descripción Completa:</strong> {spell.descripcion_completa}</p>}
+        
+        <div className='SpellDetail-images'>
+          {spell.imagen_1 && <img className="spell-image" src={constructImageUrl(spell.imagen_1)} alt="Imagen 1" />}
+          {spell.imagen_2 && <img className="spell-image" src={constructImageUrl(spell.imagen_2)} alt="Imagen 2" />}
+          {spell.imagen_3 && <img className="spell-image" src={constructImageUrl(spell.imagen_3)} alt="Imagen 3" />}
+          {spell.imagen_4 && <img className="spell-image" src={constructImageUrl(spell.imagen_4)} alt="Imagen 4" />}
+        </div>
       </div>
     </div>
   );
