@@ -101,6 +101,13 @@
   background-color: #dc3545;
   color: #fff;
 }
+.create-list-btn:hover{
+  background-color: #6d6d6d;
+}
+
+.cancel-btn:hover {
+  background-color: #fd5d6d;
+}
 
 .add-to-list-btn {
   flex: 2; /* Botón ocupará más espacio */
@@ -108,4 +115,11 @@
 
 .create-new-list-btn {
   flex: 1; /* Botón ocupará menos espacio */
+}
+
+.add-to-list-btn:hover{
+  background-color: #5c5c5c;
+}
+.create-new-list-btn:hover{
+  background-color: #e2e2e2;
 }
