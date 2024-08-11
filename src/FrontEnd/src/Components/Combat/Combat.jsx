@@ -8,7 +8,7 @@ export default function Combat() {
       <h1>Combat Page</h1>
       <div className='Combat-Options'>
         <Link to="" className='Combat-Link'>Combate Físico</Link>
-        <Link to="/combat/spells" className='Combat-Link'>Combate Mágico</Link>
+        <Link to="/combat/spells" className='Combat-Link'>Compendio de Hechizos</Link>
       </div>
     </div>
   );

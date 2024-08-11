@@ -19,19 +19,22 @@ function Form({ route, method }) {
 
     try {
       const data = { username, password };
-
+      
       const res = await tokenApi.post(route, data);
-
+      
       if (method === "login") {
         localStorage.setItem(ACCESS_TOKEN, res.data.access);
         localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
         localStorage.setItem(USERNAME, username);
-        navigate("/home");
+        navigate("/home"); // Cambia la redirección a la ruta deseada
       } else {
         navigate("/login");
       }
     } catch (error) {
-      setError(error.response ? error.response.data : "Ha ocurrido un error");
+      const errorMessage = error.response && error.response.data 
+        ? error.response.data.detail || "Ha ocurrido un error" 
+        : "Ha ocurrido un error";
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -41,7 +44,6 @@ function Form({ route, method }) {
     <form onSubmit={handleSubmit} className="form-container">
       <h1>{name}</h1>
       <input
-       
         type="text"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
@@ -49,7 +51,6 @@ function Form({ route, method }) {
         required
       />
       <input
-       
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
@@ -59,7 +60,7 @@ function Form({ route, method }) {
       <button type="submit" disabled={loading}>
         {name}
       </button>
-      {error && <p>{error}</p>}
+      {error && <p className="error-message">{error}</p>}
     </form>
   );
 }

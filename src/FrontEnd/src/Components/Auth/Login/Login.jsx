@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Form from "../Form/Form";
 import "./Login.css"; // Asegúrate de importar tus estilos CSS aquí
+import { BASE_API_URL, ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants";
 
 function Login() {
   const [error, setError] = useState("");
@@ -9,23 +10,37 @@ function Login() {
     const { username, password } = formData;
 
     try {
-      // Aquí puedes realizar la lógica para enviar los datos al backend y gestionar el inicio de sesión
-      console.log("Username:", username);
-      console.log("Password:", password);
+      const response = await fetch(`${BASE_API_URL}/api/authApp/token/get/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
 
-      // Ejemplo de manejo de errores
-      // Simulamos un error al intentar iniciar sesión
-      setError("Usuario o contraseña incorrectos");
+      if (!response.ok) {
+        throw new Error("Usuario o contraseña incorrectos");
+      }
+
+      const data = await response.json();
+
+      // Guarda los tokens en el almacenamiento local
+      localStorage.setItem(ACCESS_TOKEN, data.access);
+      localStorage.setItem(REFRESH_TOKEN, data.refresh);
+
+      // Puedes redirigir al usuario a la página principal o a otra página
+      window.location.href = "/"; // Redirige a la página principal después del inicio de sesión
+
     } catch (error) {
       console.error("Error:", error);
-      setError("Error al intentar iniciar sesión");
+      setError(error.message);
     }
   };
 
   return (
     <div className="LoginPage-Container">
       <h3>Iniciar Sesión</h3>
-      <p >Por favor introduce tu usuario y contraseña:</p>
+      <p>Por favor introduce tu usuario y contraseña:</p>
 
       <Form route="/api/authApp/token/get/" method="login" onSubmit={handleFormSubmit} />
 

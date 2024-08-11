@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Hechizo
+from .models import *
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -14,4 +14,9 @@ class HechizoAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     resource_class = HechizoResource
 
 
+class ListaFavoritosAdmin(admin.ModelAdmin):
+    list_display = ('nombre', 'usuario')
+    filter_horizontal = ('hechizos',)
+
+admin.site.register(ListaFavoritos, ListaFavoritosAdmin)
 admin.site.register(Hechizo, HechizoAdmin)

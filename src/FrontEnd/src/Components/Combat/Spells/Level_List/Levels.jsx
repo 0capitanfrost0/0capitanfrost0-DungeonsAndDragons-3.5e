@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import './Levels.css';
 import { BASE_API_URL } from "../../../constants";
-import preparedIcon from '/Combat/Spells/prepared-icon.png'; // Importa la imagen
-import preparedIconCrossed from '/Combat/Spells/prepared-icon-crossed.png'; // Importa la imagen
+import favoritedIcon from '/Combat/Spells/fav-icon-on.png'; // Importa la imagen
+import FavouritePopup from './Favourite_Popup/Favourite_Popup'; // Importa el nuevo componente de popup
 
 export default function SpellLevels() {
   const { className } = useParams();
@@ -13,9 +13,8 @@ export default function SpellLevels() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [openTabs, setOpenTabs] = useState({});
-  const [preparedSpells, setPreparedSpells] = useState({});
-  const [preparedTabs, setPreparedTabs] = useState({});
   const [openDomains, setOpenDomains] = useState({});
+  const [popup, setPopup] = useState({ visible: false, spell: null });
 
   const classMapping = {
     clerigo: "Clr",
@@ -82,10 +81,10 @@ export default function SpellLevels() {
         setLoading(false);
 
         const initialTabs = Object.keys(grouped).reduce((tabs, level) => {
-          tabs[level] = true; 
+          tabs[level] = false; 
           return tabs;
         }, {});
-        setPreparedTabs(initialTabs);
+        setOpenTabs(initialTabs);
 
         const initialDomains = Object.keys(domainGroupedSpells).reduce((domains, domain) => {
           domains[domain] = false; 
@@ -109,51 +108,6 @@ export default function SpellLevels() {
     }));
   };
 
-  const togglePreparedTab = (level) => {
-    setPreparedTabs((prevTabs) => ({
-      ...prevTabs,
-      [level]: !prevTabs[level]
-    }));
-  };
-
-  const handlePrepareSpell = (spell) => {
-    setPreparedSpells((prevPrepared) => {
-      const level = spell.clase_nivel[classMapping[className]];
-      const newPrepared = { ...prevPrepared };
-      if (!newPrepared[level]) {
-        newPrepared[level] = [];
-      }
-      const existingSpellIndex = newPrepared[level].findIndex(prepared => prepared.spell.id === spell.id);
-      if (existingSpellIndex !== -1) {
-        newPrepared[level][existingSpellIndex].count += 1;
-      } else {
-        newPrepared[level].push({ spell, count: 1 });
-      }
-      return newPrepared;
-    });
-  };
-
-  const handleRemovePreparedSpell = (spell) => {
-    setPreparedSpells((prevPrepared) => {
-      const level = spell.clase_nivel[classMapping[className]];
-      const newPrepared = { ...prevPrepared };
-      if (newPrepared[level]) {
-        const existingSpellIndex = newPrepared[level].findIndex(prepared => prepared.spell.id === spell.id);
-        if (existingSpellIndex !== -1) {
-          if (newPrepared[level][existingSpellIndex].count > 1) {
-            newPrepared[level][existingSpellIndex].count -= 1;
-          } else {
-            newPrepared[level].splice(existingSpellIndex, 1);
-            if (newPrepared[level].length === 0) {
-              delete newPrepared[level];
-            }
-          }
-        }
-      }
-      return newPrepared;
-    });
-  };
-
   const toggleDomain = (domain) => {
     setOpenDomains((prevDomains) => ({
       ...prevDomains,
@@ -161,6 +115,70 @@ export default function SpellLevels() {
     }));
   };
 
+  const openPopup = (spell) => {
+    setPopup({ visible: true, spell });
+  };
+  
+  const closePopup = () => {
+    setPopup({ visible: false, spell: null });
+  };
+
+  const handleCreateList = async (listName) => {
+    try {
+      const response = await fetch('/api/favourite-lists/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ nombre: listName, hechizos: [popup.spell.id] }),
+      });
+
+      if (response.ok) {
+        closePopup();
+        alert('Lista de favoritos creada.');
+      } else {
+        alert('Error al crear la lista de favoritos.');
+      }
+    } catch (error) {
+      console.error('Error al crear la lista de favoritos:', error);
+      alert('Error al crear la lista de favoritos.');
+    }
+  };
+
+  const handleAddToList = async (listId) => {
+    try {
+      const response = await fetch(`/api/favourite-lists/${listId}/`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ hechizos: [popup.spell.id] }),
+      });
+
+      if (response.ok) {
+        closePopup();
+        alert('Hechizo añadido a la lista de favoritos.');
+      } else {
+        alert('Error al añadir el hechizo a la lista.');
+      }
+    } catch (error) {
+      console.error('Error al añadir el hechizo a la lista:', error);
+      alert('Error al añadir el hechizo a la lista.');
+    }
+  };
+  
+  // Cierra el popup si el usuario hace clic fuera de él
+  const handleClickOutside = (event) => {
+    if (popup.visible && !event.target.closest('.popup-content')) {
+      closePopup();
+    }
+  };
+  
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [popup.visible]);
+  
   if (loading) {
     return <div className='SpellLevels-Container'>Loading...</div>;
   }
@@ -171,9 +189,11 @@ export default function SpellLevels() {
 
   return (
     <div className='SpellLevels-Container'>
-      <h1>Hechizos de {capitalizeFirstLetter(className)}</h1>
+      <div className='SpellLevels-Container-Title'>
+        <h1>Hechizos de {capitalizeFirstLetter(className)}</h1>
+      </div>
       <div className='SpellLevels-PreparedSpell'> 
-        <div className="SpellLevels-List">
+        <div className='SpellLevels-List'>
           <div className='spell-h3'>
             <h3>Lista de Conjuros</h3>
           </div>
@@ -198,8 +218,11 @@ export default function SpellLevels() {
                         </Link>
                         <span className="tooltiptext">{spell.descripcion_corta}</span>
                       </div>
-                      <button className="PreparedButton" onClick={() => handlePrepareSpell(spell)}>
-                        <img src={preparedIcon} alt="Prepared Icon" />
+                      <button 
+                        className="PreparedButton"
+                        onClick={() => openPopup(spell)}
+                      >
+                        <img src={favoritedIcon} alt="Prepared Icon" />
                       </button>
                     </li>
                   ))}
@@ -208,7 +231,7 @@ export default function SpellLevels() {
             </div>
           ))}
         </div>
-
+  
         {className === "clerigo" && Object.keys(domainGroupedSpells).length > 0 && (
           <div className="SpellLevels-List">
             <div className='spell-h3'>
@@ -235,8 +258,11 @@ export default function SpellLevels() {
                           </Link>
                           <span className="tooltiptext">{spell.descripcion_corta}</span>
                         </div>
-                        <button className="PreparedButton" onClick={() => handlePrepareSpell(spell)}>
-                          <img src={preparedIcon} alt="Prepared Icon" />
+                        <button 
+                          className="PreparedButton"
+                          onClick={() => openPopup(spell)}
+                        >
+                          <img src={favoritedIcon} alt="Prepared Icon" />
                         </button>
                       </li>
                     ))}
@@ -246,43 +272,17 @@ export default function SpellLevels() {
             ))}
           </div>
         )}
-
-        <div className="PreparedSpell-List">
-          <div className='spell-h3'>
-            <h3>Preparados</h3>
-          </div>
-          {Object.keys(preparedSpells).map(level => (
-            <div key={level} className="SpellLevel">
-              <div 
-                className="SpellLevel-Header"
-                onClick={() => togglePreparedTab(level)}
-              >
-                Nivel {level}
-              </div>
-              {preparedTabs[level] && (
-                <ul className="SpellLevel-Content">
-                  {preparedSpells[level].map(prepared => (
-                    <li key={prepared.spell.id} className="SpellItem">
-                      <div className="tooltip">
-                        <Link 
-                          to={`/combat/spells/${className}/${prepared.spell.nombre}`} 
-                          className="SpellName"
-                        >
-                          {prepared.spell.nombre} ({prepared.count})
-                        </Link>
-                        <span className="tooltiptext">{prepared.spell.descripcion_corta}</span>
-                      </div>
-                      <button className="PreparedButton" onClick={() => handleRemovePreparedSpell(prepared.spell)}>
-                        <img src={preparedIconCrossed} alt="Remove Prepared Icon" />
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          ))}
-        </div>
       </div>
+  
+      {/* Popup Component */}
+      {popup.visible && (
+        <FavouritePopup 
+          spell={popup.spell} 
+          onClose={closePopup} 
+          onCreateList={handleCreateList} 
+          onAddToList={handleAddToList} 
+        />
+      )}
     </div>
   );
 }

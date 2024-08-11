@@ -1,5 +1,7 @@
 from django.db import models
 from PIL import Image  # Asegúrate de tener Pillow instalado
+from django.contrib.auth.models import User  # Asegúrate de que el modelo User esté importado
+from django.db.models import ManyToManyField
 
 class Hechizo(models.Model):
     nombre = models.CharField(max_length=200, blank=True, null=True)
@@ -29,3 +31,16 @@ class Hechizo(models.Model):
     class Meta:
         verbose_name = 'Hechizo'
         verbose_name_plural = 'Hechizos'
+
+
+class ListaFavoritos(models.Model):
+    nombre = models.CharField(max_length=200)  # Nombre de la lista de favoritos
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='listas_de_favoritos')  # Relación con el usuario
+    hechizos = models.ManyToManyField('Hechizo', blank=True, related_name='listas_de_favoritos')  # Relación con hechizos
+
+    def __str__(self):
+        return f"{self.nombre} - {self.usuario.username}"
+    
+    class Meta:
+        verbose_name = 'Lista de Favoritos'
+        verbose_name_plural = 'Listas de Favoritos'
