@@ -11,6 +11,7 @@
     background-color: white;
     border-radius: 10px;
     width: 80%;
+    user-select: none;
 }
 
 .SpellLevels-Container-Title{
@@ -29,6 +30,8 @@
 }
 .SpellLevel{
     max-width: 300px;
+    cursor: pointer;
+
 }
 .SpellLevel-Header{
     background-color: gray;
@@ -43,6 +46,10 @@
 }
 .SpellLevel-Header:hover{
     background-color: rgb(150, 150, 150);
+}
+.SpellDomain{
+    cursor: pointer;
+
 }
 .SpellDomain-Header{
     background-color: gray;
@@ -78,6 +85,12 @@
     flex-grow: 1;
     margin-right: 10px;
 }
+.SpellName:hover{
+    background-color: gray;
+    padding: 4px;
+    color: white;
+    border-radius: 3px;
+}
 
 .PreparedButton {
     background: none;
@@ -86,6 +99,8 @@
     cursor: pointer;
     display: flex;
     align-items: center;
+    cursor: pointer;
+
 }
 
 .PreparedButton img {
