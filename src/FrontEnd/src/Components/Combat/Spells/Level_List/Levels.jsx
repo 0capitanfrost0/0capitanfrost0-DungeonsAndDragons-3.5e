@@ -123,49 +123,6 @@ export default function SpellLevels() {
     setPopup({ visible: false, spell: null });
   };
 
-  const handleCreateList = async (listName) => {
-    try {
-      const response = await fetch('/api/favourite-lists/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ nombre: listName, hechizos: [popup.spell.id] }),
-      });
-
-      if (response.ok) {
-        closePopup();
-        alert('Lista de favoritos creada.');
-      } else {
-        alert('Error al crear la lista de favoritos.');
-      }
-    } catch (error) {
-      console.error('Error al crear la lista de favoritos:', error);
-      alert('Error al crear la lista de favoritos.');
-    }
-  };
-
-  const handleAddToList = async (listId) => {
-    try {
-      const response = await fetch(`/api/favourite-lists/${listId}/`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ hechizos: [popup.spell.id] }),
-      });
-
-      if (response.ok) {
-        closePopup();
-        alert('Hechizo añadido a la lista de favoritos.');
-      } else {
-        alert('Error al añadir el hechizo a la lista.');
-      }
-    } catch (error) {
-      console.error('Error al añadir el hechizo a la lista:', error);
-      alert('Error al añadir el hechizo a la lista.');
-    }
-  };
   
   // Cierra el popup si el usuario hace clic fuera de él
   const handleClickOutside = (event) => {
@@ -219,11 +176,14 @@ export default function SpellLevels() {
                         <span className="tooltiptext">{spell.descripcion_corta}</span>
                       </div>
                       <button 
-                        className="PreparedButton"
-                        onClick={() => openPopup(spell)}
-                      >
-                        <img src={favoritedIcon} alt="Prepared Icon" />
-                      </button>
+                          className="PreparedButton"
+                          onClick={() => openPopup(spell)}
+                        >
+                          <div className="icon-tooltip">
+                            <img src={favoritedIcon} alt="Prepared Icon" />
+                            <span className="icon-tooltiptext">Agregar a lista de favoritos</span>
+                          </div>
+                        </button>
                     </li>
                   ))}
                 </ul>
@@ -262,7 +222,10 @@ export default function SpellLevels() {
                           className="PreparedButton"
                           onClick={() => openPopup(spell)}
                         >
-                          <img src={favoritedIcon} alt="Prepared Icon" />
+                          <div className="icon-tooltip">
+                            <img src={favoritedIcon} alt="Prepared Icon" />
+                            <span className="icon-tooltiptext">Agregar a lista de favoritos</span>
+                          </div>
                         </button>
                       </li>
                     ))}
@@ -278,9 +241,7 @@ export default function SpellLevels() {
       {popup.visible && (
         <FavouritePopup 
           spell={popup.spell} 
-          onClose={closePopup} 
-          onCreateList={handleCreateList} 
-          onAddToList={handleAddToList} 
+          onClose={closePopup}
         />
       )}
     </div>

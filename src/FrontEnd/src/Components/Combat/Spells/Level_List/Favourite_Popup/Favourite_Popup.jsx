@@ -1,22 +1,156 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Favourite_Popup.css";
+import { BASE_API_URL } from "../../../../constants";
 
-export default function FavouritePopup({ spell, onClose, onCreateList, onAddToList }) {
+export default function FavouritePopup({ spell, onClose }) {
   const [selectedList, setSelectedList] = useState('');
   const [creatingList, setCreatingList] = useState(false);
   const [listName, setListName] = useState('');
+  const [userId, setUserId] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [lists, setLists] = useState([]);
 
-  const handleCreateList = () => {
-    if (listName.trim()) {
-      onCreateList(listName);
+  // Función para obtener el ID del usuario
+  const fetchUserId = async () => {
+    const username = localStorage.getItem('username');
+    const token = localStorage.getItem('access');
+
+    try {
+      const response = await fetch(`${BASE_API_URL}/api/authApp/users/${username}/`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Error fetching user data');
+      }
+
+      const data = await response.json();
+      setUserId(data.id);
+
+      // Fetch lists once we have the userId
+      fetchLists(data.id);
+    } catch (error) {
+      console.error('Error fetching user ID:', error);
     }
   };
 
-  const handleAddToList = () => {
+  // Función para obtener las listas del usuario
+  const fetchLists = async (userId) => {
+    const token = localStorage.getItem('access');
+
+    try {
+      const response = await fetch(`${BASE_API_URL}/api/combatApp/listas-favoritos/`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Error fetching lists');
+      }
+
+      const data = await response.json();
+      setLists(data.filter(list => list.usuario === userId));
+    } catch (error) {
+      console.error('Error fetching lists:', error);
+    }
+  };
+
+  // Función para manejar la creación de la lista
+  const handleCreateList = async () => {
+    if (listName.trim() && userId) {
+      setLoading(true);
+
+      const newList = {
+        nombre: listName,
+        usuario: userId,
+        hechizos: []
+      };
+
+      try {
+        const response = await fetch(`${BASE_API_URL}/api/combatApp/listas-favoritos/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+          },
+          body: JSON.stringify(newList)
+        });
+
+        if (!response.ok) {
+          throw new Error('Error creating list');
+        }
+
+        const data = await response.json();
+        setLists([...lists, data]); // Añadir la nueva lista a las listas existentes
+
+        setCreatingList(false);
+        setListName('');
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  // Función para agregar el hechizo a la lista seleccionada
+  const handleAddToList = async () => {
     if (selectedList) {
-      onAddToList(selectedList);
+      setLoading(true);
+
+      try {
+        // Fetch the selected list
+        const listResponse = await fetch(`${BASE_API_URL}/api/combatApp/listas-favoritos/${selectedList}/`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+          }
+        });
+
+        if (!listResponse.ok) {
+          throw new Error('Error fetching list');
+        }
+
+        const listData = await listResponse.json();
+        
+        // Add the spell to the list
+        const updatedList = {
+          ...listData,
+          hechizos: [...listData.hechizos, spell.id]
+        };
+
+        // Update the list with the new spell
+        const updateResponse = await fetch(`${BASE_API_URL}/api/combatApp/listas-favoritos/${selectedList}/`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+          },
+          body: JSON.stringify(updatedList)
+        });
+
+        if (!updateResponse.ok) {
+          throw new Error('Error updating list');
+        }
+
+        onClose(); // Cierra el popup después de añadir a la lista
+      } catch (error) {
+        console.error('Error adding spell to list:', error);
+      } finally {
+        setLoading(false);
+      }
     }
   };
+
+  useEffect(() => {
+    fetchUserId();
+  }, []);
 
   return (
     <div className="popup-overlay">
@@ -36,10 +170,17 @@ export default function FavouritePopup({ spell, onClose, onCreateList, onAddToLi
               onChange={(e) => setListName(e.target.value)}
             />
             <div className="popup-buttons-container">
-              <button className="create-list-btn" onClick={handleCreateList}>
+              <button
+                className="create-list-btn"
+                onClick={handleCreateList}
+                disabled={loading}
+              >
                 Crear Lista
               </button>
-              <button className="cancel-btn" onClick={() => setCreatingList(false)}>
+              <button
+                className="cancel-btn"
+                onClick={() => setCreatingList(false)}
+              >
                 Cancelar
               </button>
             </div>
@@ -52,9 +193,11 @@ export default function FavouritePopup({ spell, onClose, onCreateList, onAddToLi
               className="list-select"
             >
               <option value="">Seleccionar Lista</option>
-              {/* Example options; replace with dynamic list data */}
-              <option value="1">Lista 1</option>
-              <option value="2">Lista 2</option>
+              {lists.map(list => (
+                <option key={list.id} value={list.id}>
+                  {list.nombre}
+                </option>
+              ))}
             </select>
             <div className="popup-buttons-container">
               <button

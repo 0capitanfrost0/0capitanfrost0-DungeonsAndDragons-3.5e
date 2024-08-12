@@ -24,6 +24,75 @@
     margin: 0 auto;
 
 }
+.spell-h3{
+    text-align: center;
+}
+.SpellLevel{
+    max-width: 300px;
+}
+.SpellLevel-Header{
+    background-color: gray;
+    color: white;
+    text-align: center;
+
+    padding: 10px;
+    margin-bottom: 5%;
+
+    border-radius: 4px;
+    width: 280px;
+}
+.SpellLevel-Header:hover{
+    background-color: rgb(150, 150, 150);
+}
+.SpellDomain-Header{
+    background-color: gray;
+    color: white;
+    text-align: center;
+
+    padding: 10px;
+    margin-bottom: 5%;
+
+    border-radius: 4px;
+    width: 280px;
+}
+.SpellDomain-Header:hover{
+    background-color: rgb(150, 150, 150);
+}
+.SpellLevel-Content {
+    list-style: none; /* Elimina los puntos de la lista */
+    padding: 0; /* Elimina el relleno por defecto */
+    margin: 0; /* Elimina el margen por defecto */
+}
+
+.SpellItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-left: 0; /* Asegura que no haya sangría a la izquierda */
+}
+
+.SpellName {
+    text-decoration: none; /* Elimina la decoración de subrayado */
+    color: black; /* Elimina el color de enlace típico */
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.PreparedButton {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.PreparedButton img {
+    width: 24px; /* Ajusta el tamaño según lo necesites */
+    height: 24px;
+}
+
 
 /* Estilo del tooltip */
 .tooltip {
@@ -71,5 +140,31 @@
   }
   
 
-
+  .icon-tooltip {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .icon-tooltiptext {
+    visibility: hidden;
+    width: 150px; /* Ajusta el ancho según el contenido */
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Posición del tooltip */
+    left: 50%;
+    margin-left: -75px; /* Centro el tooltip */
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .icon-tooltip:hover .icon-tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  }
+  
   

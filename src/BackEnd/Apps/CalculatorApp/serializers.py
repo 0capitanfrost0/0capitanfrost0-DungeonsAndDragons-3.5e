@@ -8,8 +8,6 @@ class HechizoSerializer(serializers.ModelSerializer):
 
 
 class ListaFavoritosSerializer(serializers.ModelSerializer):
-    hechizos = HechizoSerializer(many=True, read_only=True)
-
     class Meta:
         model = ListaFavoritos
-        fields = ['id', 'nombre', 'usuario', 'hechizos']
+        fields = '__all__'

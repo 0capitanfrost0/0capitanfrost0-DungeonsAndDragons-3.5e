@@ -23,16 +23,23 @@ class CreateUserView(generics.CreateAPIView):
 class UserDetailView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]  # Only authenticated users can access this view
+    #permission_classes = [IsAuthenticated]  # Only authenticated users can access this view
 
     def get_object(self):
         # Option 1: Return the current user
-        #return self.request.user
+        return self.request.user
 
         # Option 2: If you want to get user by ID, uncomment the following lines:
-        user_id = self.kwargs.get("pk")
-        return get_object_or_404(User, pk=user_id)
+        #user_id = self.kwargs.get("pk")
+        #return get_object_or_404(User, pk=user_id)
 
+class UserByUsernameDetailView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    
+    def get_object(self):
+        username = self.kwargs.get("username")
+        return get_object_or_404(User, username=username)
 #
 #@api_view(['POST'])
 #def create_admin_user(request):

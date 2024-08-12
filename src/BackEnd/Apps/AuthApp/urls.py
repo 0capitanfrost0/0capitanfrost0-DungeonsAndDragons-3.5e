@@ -10,8 +10,9 @@ urlpatterns = [
     path("token/get/", TokenObtainPairView.as_view(), name="get_token"),
     path("token/refresh/", TokenRefreshView.as_view(), name="refresh"),
     path("authenticator/", include("rest_framework.urls")),#login / logout
-    path("user/<int:pk>/", UserDetailView.as_view(), name="user_detail_by_id"),  # Get specific user info
-
+    path('users/<str:username>/', UserByUsernameDetailView.as_view(), name='user-detail-by-username'),
+    path("user/", UserDetailView.as_view(), name="log_user_detail"),  # Get specific user info
     #Auth
 
 ]
+
