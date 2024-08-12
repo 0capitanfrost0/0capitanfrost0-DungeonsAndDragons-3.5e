@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import './Levels.css';
 import { BASE_API_URL } from "../../../constants";
-import favoritedIcon from '/Combat/Spells/fav-icon-on.png'; // Importa la imagen
-import FavouritePopup from './Favourite_Popup/Favourite_Popup'; // Importa el nuevo componente de popup
+import quickPreparedOn from '/Combat/Spells/quick-prepared-on.png'; 
+import preparedIconOn from '/Combat/Spells/prepared-icon-on.png'; 
+import FavouritePopup from './Favourite_Popup/Favourite_Popup'; 
 
 export default function SpellLevels() {
   const { className } = useParams();
@@ -180,10 +181,11 @@ export default function SpellLevels() {
                           onClick={() => openPopup(spell)}
                         >
                           <div className="icon-tooltip">
-                            <img src={favoritedIcon} alt="Prepared Icon" />
-                            <span className="icon-tooltiptext">Agregar a lista de favoritos</span>
+                            <img src={preparedIconOn} alt="Prepared Icon" />
+                            <span className="icon-tooltiptext">Agregar a una lista</span>
                           </div>
                         </button>
+                        
                     </li>
                   ))}
                 </ul>
@@ -223,8 +225,8 @@ export default function SpellLevels() {
                           onClick={() => openPopup(spell)}
                         >
                           <div className="icon-tooltip">
-                            <img src={favoritedIcon} alt="Prepared Icon" />
-                            <span className="icon-tooltiptext">Agregar a lista de favoritos</span>
+                            <img src={preparedIconOn} alt="Prepared Icon" />
+                            <span className="icon-tooltiptext">Agregar a una lista</span>
                           </div>
                         </button>
                       </li>

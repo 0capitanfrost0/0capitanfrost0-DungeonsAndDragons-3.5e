@@ -30,10 +30,11 @@
 }
 .SpellLevel{
     max-width: 300px;
-    cursor: pointer;
 
 }
 .SpellLevel-Header{
+    cursor: pointer;
+
     background-color: gray;
     color: white;
     text-align: center;
@@ -48,10 +49,11 @@
     background-color: rgb(150, 150, 150);
 }
 .SpellDomain{
-    cursor: pointer;
 
 }
 .SpellDomain-Header{
+    cursor: pointer;
+
     background-color: gray;
     color: white;
     text-align: center;
