@@ -13,6 +13,7 @@ import Login from './Components/Auth/Login/Login';
 import Register from './Components/Auth/Register/Register';
 import ProtectedRoute from './Components/Auth/ProtectedRoute';
 import Navbar from './Components/Main/Navbar/Navbar';
+import FavouriteList from './Components/Combat/Spells/Favorite_List/Favourite_List';
 
 
 
@@ -52,6 +53,8 @@ function App() {
           <Route path="/combat/spells" element={<ProtectedRoute><ClassesGrid /></ProtectedRoute>} />
           <Route path="/combat/spells/:className" element={<ProtectedRoute><SpellLevels/></ProtectedRoute>} />
           <Route path="/combat/spells/:className/:name" element={<ProtectedRoute><SpellDetail /></ProtectedRoute>} />
+          <Route path="/combat/spells/favourite-list" element={<ProtectedRoute><FavouriteList/></ProtectedRoute>} />
+
         </Route>
 
         <Route path="*" element={<NotFound />} />

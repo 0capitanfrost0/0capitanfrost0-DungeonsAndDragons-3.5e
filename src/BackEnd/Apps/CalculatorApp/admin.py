@@ -15,8 +15,8 @@ class HechizoAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
 
 class ListaFavoritosAdmin(admin.ModelAdmin):
-    list_display = ('nombre', 'usuario')
-    filter_horizontal = ('hechizos',)
+    list_display = ('nombre', 'usuario','descripcion','clase','hechizos_ids',)
+
 
 admin.site.register(ListaFavoritos, ListaFavoritosAdmin)
 admin.site.register(Hechizo, HechizoAdmin)

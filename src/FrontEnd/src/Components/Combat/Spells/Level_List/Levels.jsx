@@ -244,6 +244,7 @@ export default function SpellLevels() {
         <FavouritePopup 
           spell={popup.spell} 
           onClose={closePopup}
+          className={className}
         />
       )}
     </div>

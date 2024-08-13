@@ -1,0 +1,165 @@
+.Favourite_List-Container{
+  background-color: white;
+}
+/* General Container */
+.favourite-list-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* Title */
+.favourite-list-title {
+  margin-bottom: 20px;
+  font-size: 2em;
+  color: #333;
+}
+
+/* Class Section */
+.class-section {
+  margin-bottom: 30px;
+}
+
+/* Class Title */
+.class-section-title {
+  cursor: pointer;
+  font-size: 1.5em;
+  color: #333;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 5px;
+}
+
+.class-section-title:hover {
+  color: #007bff;
+}
+
+/* List Title */
+.list-title {
+  cursor: pointer;
+  font-size: 1.2em;
+  color: #007bff;
+  margin: 5px 0;
+}
+
+.list-title:hover {
+  text-decoration: underline;
+}
+
+/* Tooltip */
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  width: 200px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -100px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip-container:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Spell Level Section */
+.spell-level-section {
+  margin-bottom: 20px;
+}
+
+.level-title {
+  cursor: pointer;
+  font-size: 1.1em;
+  color: #333;
+}
+
+.level-title:hover {
+  color: #007bff;
+}
+
+/* Spell Items */
+.spell-item {
+  display: flex;
+  align-items: center;
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.spell-item:last-child {
+  border-bottom: none;
+}
+
+/* Marked Spell */
+.spell-item.marked {
+  background-color: #f0f8ff; /* Light blue background for marked spells */
+  border-left: 4px solid #4caf50; /* Green border to the left of the marked spell */
+  padding-left: 10px;
+  margin-left: 10px;
+}
+
+/* Toggled Spell */
+.spell-item.toggled {
+  font-weight: bold;
+  color: #007bff; /* Blue color for toggled spells */
+}
+
+/* Spell Name Link */
+.spell-name-link {
+  text-decoration: none;
+  color: #333;
+}
+
+.spell-name-link:hover {
+  text-decoration: underline;
+  color: #007bff;
+}
+
+/* Icons */
+.spell-use-icon {
+  cursor: pointer;
+  margin-left: 10px;
+  width: 20px;
+  height: 20px;
+}
+
+.spell-mark-icon {
+  cursor: pointer;
+  margin-left: 8px;
+  width: 20px;
+  height: 20px;
+}
+
+/* No Spells Message */
+.no-spells-message {
+  font-style: italic;
+  color: #888;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .favourite-list-container {
+    padding: 10px;
+  }
+
+  .class-section-title,
+  .list-title,
+  .level-title {
+    font-size: 1em;
+  }
+
+  .spell-use-icon,
+  .spell-mark-icon {
+    width: 16px;
+    height: 16px;
+  }
+}

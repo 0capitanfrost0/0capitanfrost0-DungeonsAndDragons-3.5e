@@ -124,3 +124,28 @@
   background-color: #e2e2e2;
 }
 
+/* Favourite_Popup.css */
+
+.popup-view-mode {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.popup-view-mode button {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px 20px;
+  margin-right: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.popup-view-mode button.active {
+  background-color: #696969;
+  color: #fff;
+}
+
+.popup-view-mode button:hover {
+  background-color: #8a8a8a;
+}

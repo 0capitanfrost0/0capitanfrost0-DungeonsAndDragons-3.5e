@@ -40,6 +40,14 @@ class UserByUsernameDetailView(generics.RetrieveAPIView):
     def get_object(self):
         username = self.kwargs.get("username")
         return get_object_or_404(User, username=username)
+
+class UserByIDDetailView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    
+    def get_object(self):
+        pk = self.kwargs.get("pk")
+        return get_object_or_404(User, pk=pk)
 #
 #@api_view(['POST'])
 #def create_admin_user(request):

@@ -9,6 +9,8 @@ export default function Combat() {
       <div className='Combat-Options'>
         <Link to="" className='Combat-Link'>Combate Físico</Link>
         <Link to="/combat/spells" className='Combat-Link'>Compendio de Hechizos</Link>
+        <Link to="/combat/spells/favourite-list" className='Combat-Link'>Mi libro de hechizos</Link>
+
       </div>
     </div>
   );

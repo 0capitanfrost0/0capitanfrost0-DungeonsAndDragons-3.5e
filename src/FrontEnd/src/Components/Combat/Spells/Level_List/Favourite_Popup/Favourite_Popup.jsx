@@ -2,13 +2,16 @@ import React, { useState, useEffect } from "react";
 import "./Favourite_Popup.css";
 import { BASE_API_URL } from "../../../../constants";
 
-export default function FavouritePopup({ spell, onClose }) {
+export default function FavouritePopup({ spell, onClose, className }) {
   const [selectedList, setSelectedList] = useState('');
   const [creatingList, setCreatingList] = useState(false);
   const [listName, setListName] = useState('');
+  const [listDescription, setListDescription] = useState(''); // Estado para descripción
   const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [lists, setLists] = useState([]);
+  const [classLists, setClassLists] = useState([]); // Lista de listas de la clase actual
+  const [viewMode, setViewMode] = useState('general'); // Para alternar entre listas generales y de clase
 
   // Función para obtener el ID del usuario
   const fetchUserId = async () => {
@@ -57,6 +60,7 @@ export default function FavouritePopup({ spell, onClose }) {
 
       const data = await response.json();
       setLists(data.filter(list => list.usuario === userId));
+      setClassLists(data.filter(list => list.clase === className)); // Filtrar listas por clase
     } catch (error) {
       console.error('Error fetching lists:', error);
     }
@@ -69,8 +73,10 @@ export default function FavouritePopup({ spell, onClose }) {
 
       const newList = {
         nombre: listName,
+        descripcion: listDescription, // Incluye la descripción
         usuario: userId,
-        hechizos: []
+        clase: className, // Marca la lista con la clase actual
+        hechizos_ids: []  // Lista de hechizos inicializada como vacía
       };
 
       try {
@@ -88,10 +94,12 @@ export default function FavouritePopup({ spell, onClose }) {
         }
 
         const data = await response.json();
-        setLists([...lists, data]); // Añadir la nueva lista a las listas existentes
+        setLists([...lists, data]); // Añadir la nueva lista a las listas generales
+        setClassLists([...classLists, data]); // También añadir a las listas de la clase actual
 
         setCreatingList(false);
         setListName('');
+        setListDescription(''); // Limpiar el campo de descripción
       } finally {
         setLoading(false);
       }
@@ -119,10 +127,10 @@ export default function FavouritePopup({ spell, onClose }) {
 
         const listData = await listResponse.json();
         
-        // Add the spell to the list
+        // Add the spell ID to the list's hechizos_ids
         const updatedList = {
           ...listData,
-          hechizos: [...listData.hechizos, spell.id]
+          hechizos_ids: [...listData.hechizos_ids, spell.id]
         };
 
         // Update the list with the new spell
@@ -169,6 +177,15 @@ export default function FavouritePopup({ spell, onClose }) {
               value={listName}
               onChange={(e) => setListName(e.target.value)}
             />
+            <input
+              type="text"
+              placeholder="Descripción de la lista"
+              value={listDescription}
+              onChange={(e) => setListDescription(e.target.value)}
+            />
+            <div className="popup-notes">
+              <p><strong>Nota:</strong> La lista creada desde esta sección quedará marcada como perteneciente a la clase de la sección actual para su correcta ordenación.</p>
+            </div>
             <div className="popup-buttons-container">
               <button
                 className="create-list-btn"
@@ -187,18 +204,37 @@ export default function FavouritePopup({ spell, onClose }) {
           </div>
         ) : (
           <div className="popup-select-list">
+            <p><strong>Filtrar listas por:</strong></p>
+            <div className="popup-view-mode">
+              <button
+                onClick={() => setViewMode('class')}
+                className={viewMode === 'class' ? 'active' : ''}
+              >
+                Listas de {className}
+              </button>
+              <button
+                onClick={() => setViewMode('general')}
+                className={viewMode === 'general' ? 'active' : ''}
+              >
+                Todas mis listas
+              </button>
+
+            </div>
             <select
               onChange={(e) => setSelectedList(e.target.value)}
               value={selectedList}
               className="list-select"
             >
               <option value="">Seleccionar Lista</option>
-              {lists.map(list => (
+              {(viewMode === 'general' ? lists : classLists).map(list => (
                 <option key={list.id} value={list.id}>
-                  {list.nombre}
+                  {list.nombre} ({list.clase.charAt(0).toUpperCase() + list.clase.slice(1)}) {/* Mostrar nombre y clase */}
                 </option>
               ))}
             </select>
+            <div className="popup-notes">
+              <p><strong>Nota:</strong> Los hechizos serán agrupados por nivel teniendo en cuenta la clase de la lista a la que se añade.</p>
+            </div>
             <div className="popup-buttons-container">
               <button
                 className="add-to-list-btn"
