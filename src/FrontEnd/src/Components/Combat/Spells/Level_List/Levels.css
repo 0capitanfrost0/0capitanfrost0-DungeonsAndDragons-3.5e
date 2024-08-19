@@ -2,11 +2,9 @@
 .SpellLevels-Container {
     display: flex;
     flex-direction: column;
-
     margin: 0 auto;
     margin-top: 2%;
     padding-bottom: 2%;
-
     color: black;
     background-color: white;
     border-radius: 10px;
@@ -14,113 +12,116 @@
     user-select: none;
 }
 
-.SpellLevels-Container-Title{
+.SpellLevels-Container-Title {
     margin-top: 2%;
     margin: 0 auto;
 }
-.SpellLevels-PreparedSpell{
+
+.SpellLevels-PreparedSpell {
     display: flex;
-    justify-content:space-around ;
+    justify-content: space-around;
     width: 90%;
     margin: 0 auto;
+}
 
-}
-.spell-h3{
+.spell-h3 {
     text-align: center;
+    cursor: pointer;
 }
-.SpellLevel{
+
+.SpellLevel {
     max-width: 300px;
-
 }
-.SpellLevel-Header{
-    cursor: pointer;
 
+.SpellLevel-Header {
+    cursor: pointer;
     background-color: gray;
     color: white;
     text-align: center;
-
     padding: 10px;
     margin-bottom: 5%;
-
     border-radius: 4px;
     width: 280px;
 }
-.SpellLevel-Header:hover{
+
+.SpellLevel-Header:hover {
     background-color: rgb(150, 150, 150);
 }
-.SpellDomain{
 
-}
-.SpellDomain-Header{
+.SpellDomain {}
+
+.SpellDomain-Header {
     cursor: pointer;
-
     background-color: gray;
     color: white;
     text-align: center;
-
     padding: 10px;
     margin-bottom: 5%;
-
     border-radius: 4px;
     width: 280px;
 }
-.SpellDomain-Header:hover{
+
+.SpellDomain-Header:hover {
     background-color: rgb(150, 150, 150);
 }
+
 .SpellLevel-Content {
-    list-style: none; /* Elimina los puntos de la lista */
-    padding: 0; /* Elimina el relleno por defecto */
-    margin: 0; /* Elimina el margen por defecto */
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .SpellItem {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between; /* Alinea el contenido a los extremos */
     margin-bottom: 10px;
-    padding-left: 0; /* Asegura que no haya sangría a la izquierda */
+    padding-left: 0;
 }
 
 .SpellName {
-    text-decoration: none; /* Elimina la decoración de subrayado */
-    color: black; /* Elimina el color de enlace típico */
-    flex-grow: 1;
+    text-decoration: none;
+    color: black;
+    flex-grow: 1; /* Permite que el texto ocupe el espacio disponible */
     margin-right: 10px;
 }
-.SpellName:hover{
+
+.SpellName:hover {
     background-color: gray;
     padding: 4px;
     color: white;
     border-radius: 3px;
 }
 
-.PreparedButton {
+/* Botones alineados horizontalmente con separación */
+.spells-buttons {
+    display: flex;
+    align-items:center;
+    gap: 10px; /* Espacio entre los botones */
+}
+
+.PreparedButton, .QuickPreparedButton {
     background: none;
     border: none;
     padding: 0;
     cursor: pointer;
     display: flex;
     align-items: center;
-    cursor: pointer;
-
 }
 
-.PreparedButton img {
-    width: 24px; /* Ajusta el tamaño según lo necesites */
+.PreparedButton img, .QuickPreparedButton img {
+    width: 24px;
     height: 24px;
 }
 
-
-/* Estilo del tooltip */
 .tooltip {
     position: relative;
     display: inline-block;
 }
 
-/* Estilo del tooltip (oculto por defecto) */
 .tooltip .tooltiptext {
     visibility: hidden;
-    width: 200px; /* Ajusta el ancho según el contenido */
+    width: 200px;
     background-color: black;
     color: #fff;
     text-align: center;
@@ -128,21 +129,18 @@
     padding: 5px 10px;
     position: absolute;
     z-index: 1;
-    bottom: 125%; /* Posición del tooltip */
+    bottom: 125%;
     left: 50%;
-    margin-left: -100px; /* Centro el tooltip */
+    margin-left: -100px;
     opacity: 0;
     transition: opacity 0.3s;
 }
 
-/* Mostrar el tooltip cuando el usuario pasa el ratón por encima */
 .tooltip:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
 }
 
-
-/* Estilo del overlay del popup */
 .popup-overlay {
     position: fixed;
     top: 0;
@@ -154,17 +152,16 @@
     justify-content: center;
     align-items: center;
     z-index: 1000;
-  }
-  
+}
 
-  .icon-tooltip {
+.icon-tooltip {
     position: relative;
     display: inline-block;
-  }
-  
-  .icon-tooltiptext {
+}
+
+.icon-tooltip .icon-tooltiptext {
     visibility: hidden;
-    width: 150px; /* Ajusta el ancho según el contenido */
+    width: 150px;
     background-color: black;
     color: #fff;
     text-align: center;
@@ -172,16 +169,64 @@
     padding: 5px 10px;
     position: absolute;
     z-index: 1;
-    bottom: 125%; /* Posición del tooltip */
+    bottom: 125%;
     left: 50%;
-    margin-left: -75px; /* Centro el tooltip */
+    margin-left: -75px;
     opacity: 0;
     transition: opacity 0.3s;
-  }
-  
-  .icon-tooltip:hover .icon-tooltiptext {
+}
+
+.icon-tooltip:hover .icon-tooltiptext {
     visibility: visible;
     opacity: 1;
+}
+.small-text {
+    font-size: 12px; /* Tamaño fijo en píxeles */
+}
+/* Media Queries para responsividad */
+
+/* Para pantallas de 768px o menos (tablets) */
+@media (max-width: 768px) {
+    .SpellLevels-PreparedSpell {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .SpellLevel-Header, .SpellDomain-Header {
+        width: 90%;
+    }
+}
+
+/* Para pantallas de 480px o menos (móviles pequeños) */
+@media (max-width: 480px) {
+    .SpellLevels-Container {
+        width: 100%;
+    }
+
+    .SpellLevels-PreparedSpell {
+        width: 100%;
+    }
+
+    .SpellLevel-Header, .SpellDomain-Header {
+        width: 100%;
+    }
+
+    .SpellName {
+        font-size: 14px;
+    }
+
+    .tooltip .tooltiptext {
+        width: 150px;
+    }
+
+    .icon-tooltiptext {
+        width: 120px;
+    }
+}
+.no-prepared-spells-message {
+    padding: 10px;
+    color: #333;
+    font-size: 16px;
+    text-align: center;
+    font-style: italic;
   }
-  
-  

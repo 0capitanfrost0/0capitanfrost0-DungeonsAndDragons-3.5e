@@ -7,10 +7,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = os.environ.get('SECRET_KEY',default='your secret key')
-DEBUG = 'RENDER' not in os.environ
 
-ALLOWED_HOSTS = ["*"]
+SECRET_KEY = 'django-insecure-0vr7tjb3i1-tcfkt+&63ba9mljy=f7psad-o*2!_hud45*wy*d'
+DEBUG=True
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -27,9 +26,6 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
 
-
-RENDER_EXTERNAL_HOSTNAME=os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-if RENDER_EXTERNAL_HOSTNAME: ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # Application definition
 BASE_APPS = [
@@ -71,10 +67,6 @@ MIDDLEWARE = [
     # Fin-Cors
 
     'django.middleware.security.SecurityMiddleware',
-
-    # Whitenoise
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-    # Fin Whitenoise
     
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -84,13 +76,26 @@ MIDDLEWARE = [
 
 ]
 
+ALLOWED_HOSTS = ["*"]
+
+CORS_ORIGIN_WHITELIST = [
+     'http://localhost:3000',
+     'http://127.0.0.1:8000', 
+     'http://localhost:4173',
+     'http://192.168.1.136:5173',
+]
 #---------------SOLUCION CORSHEADERS ERROR---------------
 from corsheaders.defaults import default_headers
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
+    'http://localhost:4173',
+    'http://localhost',
+    'http://127.0.0.1',
+    'http://0.0.0.0',
+    'http://192.168.1.136:5173',
 ]
-
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'username',
 ]
@@ -118,12 +123,12 @@ TEMPLATES = [
 WSGI_APPLICATION = 'CoreApp.wsgi.application'
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default='sqlite:///db.sqlite3',
-        conn_max_age=600
-    )
-
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -155,11 +160,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-
-if not DEBUG:
-    STATIC_ROOT=os.path.join(BASE_DIR,'staticfiles')
-    STATICFILES_STORAGE= 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-    
 
 REST_FRAMEWORK = {'DEFAULT_SCHEMA_CLASS':'rest_framework.schemas.coreapi.AutoSchema',}
 

@@ -4,7 +4,9 @@ Comandos acceso rapido
 #######################################################################
 
 npm run dev 		    (FrontEnd)
+npm run dev -- --host   (FrontEnd Abierto Local)
 python manage.py runserver  (BackEnd)
+python manage.py runserver 0.0.0.0:8000 (BackEnd Abierto Local)
 
 .\env\Scripts\activate (Iniciar Entorno Virtual)
 
